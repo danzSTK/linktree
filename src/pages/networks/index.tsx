@@ -1,6 +1,6 @@
 const  Networks = () => {
     return (
-        <div>
+        <div class>
             <h1>Links</h1>
         </div>
     )
