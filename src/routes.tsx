@@ -5,6 +5,7 @@ import Admin from "./pages/admin";
 import Login from "./pages/login";
 import Networks from "./pages/networks";
 import Private from "./routes/private";
+import ErrorPage from "./pages/error";
 
 const AppRoutes = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const AppRoutes = createBrowserRouter([
         <Networks />
       </Private>
     ),
+  },
+  {
+    path: "*",
+    element: <ErrorPage />,
   },
 ]);
 
