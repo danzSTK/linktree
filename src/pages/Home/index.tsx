@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import Social from "../../components/Social";
 import { FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { db } from "../../services/firebaseConnection";
 
 type LinkProps = {
@@ -43,8 +50,24 @@ const Home = () => {
     }
 
     loadLinks();
+  }, []);
 
-    console.log(links);
+  useEffect(() => {
+    function loadSocialLinks() {
+      const docRef = doc(db, "social", "link");
+
+      getDoc(docRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          setSocialLinks({
+            facebook: snapshot.data().facebook,
+            instagram: snapshot.data().instagram,
+            youtube: snapshot.data().youtube,
+          });
+        }
+      });
+    }
+
+    loadSocialLinks();
   }, []);
 
   return (
@@ -70,17 +93,19 @@ const Home = () => {
           </section>
         ))}
 
-        <footer className="flex justify-center gap-3 my-4">
-          <Social url="https://www.facebook.com/danielfelix.dev">
-            <FaFacebook size={35} color="#fff" />
-          </Social>
-          <Social url="https://www.instagram.com/danielfelix.dev/">
-            <FaInstagram size={35} color="#fff" />
-          </Social>
-          <Social url="https://www.youtube.com/channel/UC1234567890abcdef">
-            <FaYoutube size={35} color="#fff" />
-          </Social>
-        </footer>
+        {socialLinks && Object.keys(socialLinks).length > 0 && (
+          <footer className="flex justify-center gap-3 my-4">
+            <Social url={socialLinks.facebook}>
+              <FaFacebook size={35} color="#fff" />
+            </Social>
+            <Social url={socialLinks.instagram}>
+              <FaInstagram size={35} color="#fff" />
+            </Social>
+            <Social url={socialLinks.youtube}>
+              <FaYoutube size={35} color="#fff" />
+            </Social>
+          </footer>
+        )}
       </main>
     </div>
   );
